@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>hu.caiwan</groupId>
+		<artifactId>skeleton</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>skeleton-app</artifactId>
+
+	<properties>
+		<java-version>1.8</java-version>
+
+		<!-- property file names -->
+		<file.properties.dev>application.dev.properties</file.properties.dev>
+		<file.properties.live>application.live.properties</file.properties.live>
+		<file.properties>application.properties</file.properties>
+	</properties>
+
+	<packaging>war</packaging>
+
+	<profiles>
+		<!-- PRODUCTION PROFILE -->
+		<profile>
+			<id>live</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<echo>Using ${file.properties.live}
+											${project.build.outputDirectory}</echo>
+										<copy file="src/main/resources/${file.properties.live}"
+											tofile="${project.build.outputDirectory}/${file.properties}" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- DEV PROFILE -->
+		<profile>
+			<id>dev</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<echo>Using ${file.properties.dev}
+											${project.build.outputDirectory}</echo>
+										<copy file="src/main/resources/${file.properties.dev}"
+											tofile="${project.build.outputDirectory}/${file.properties}" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<!-- modules -->
+		<dependency>
+			<groupId>hu.caiwan</groupId>
+			<artifactId>skeleton-services</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+
+		<!-- Javax servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<!-- <version>3.1.0</version> -->
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- oauth -->
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+		</dependency>
+
+		<!-- Git pugin -->
+		<dependency>
+			<groupId>pl.project13.maven</groupId>
+			<artifactId>git-commit-id-plugin</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<plugins>
+
+			<!-- WAR -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- https://github.com/ktoso/maven-git-commit-id-plugin -->
+			<!--  
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>2.2.2</version>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>validate-the-git-infos</id>
+						<goals>
+							<goal>validateRevision</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+
+				<configuration>
+					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+					<prefix>git</prefix>
+					<dateFormat>dd.MM.yyyy '@' HH:mm:ss z</dateFormat>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+					<format>properties</format>
+					<skipPoms>true</skipPoms>
+					<injectAllReactorProjects>false</injectAllReactorProjects>
+					<useNativeGit>false</useNativeGit>
+					<abbrevLength>7</abbrevLength>
+					<gitDescribe>
+						<skip>true</skip>
+					</gitDescribe>
+				</configuration>
+
+			</plugin>
+-->
+		</plugins>
+	</build>
+
+</project>
